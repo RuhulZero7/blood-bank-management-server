@@ -26,14 +26,14 @@ async function run() {
       "bloodRequestsHistory"
     );
 
-    // POST API
+    // donate blood POST API
     app.post("/donateBlood", async (req, res) => {
       const blood = req.body;
       const result = await donateBloodsCollection.insertOne(blood);
       res.json(result);
     });
 
-    // GET API
+    // donate blood GET API
     app.get("/donateBlood", async (req, res) => {
       const cursor = donateBloodsCollection.find({});
       const bloods = await cursor.toArray();
