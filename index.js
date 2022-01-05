@@ -18,13 +18,13 @@ async function run() {
     await client.connect();
     const database = client.db("bloodBank");
     const donateBloodsCollection = database.collection("donateBloods");
-    const donateBloodsHistoryCollection = database.collection(
-      "donateBloodsHistory"
-    );
+    // const donateBloodsHistoryCollection = database.collection(
+    //   "donateBloodsHistory"
+    // );
     const bloodRequestsCollection = database.collection("bloodRequests");
-    const bloodRequestsHistoryCollection = database.collection(
-      "bloodRequestsHistory"
-    );
+    // const bloodRequestsHistoryCollection = database.collection(
+    //   "bloodRequestsHistory"
+    // );
 
     // donate blood POST API
     app.post("/donateBlood", async (req, res) => {
@@ -38,6 +38,30 @@ async function run() {
       const cursor = donateBloodsCollection.find({});
       const bloods = await cursor.toArray();
       res.json(bloods);
+    });
+
+    // blood request POST API
+    app.post("/bloodRequest", async (req, res) => {
+      const blood = req.body;
+      const result = await bloodRequestsCollection.insertOne(blood);
+      res.json(result);
+    });
+
+    // get single donation
+    app.get("/donateBlood/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const products = await donateBloodsCollection.findOne(query);
+      res.json(products);
+    });
+
+    // get filtered donation
+    app.get("/donateBlood/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const cursor = donateBloodsCollection.find(query);
+      const result = await cursor.toArray();
+      res.json(result);
     });
   } finally {
     //   await client.close();
