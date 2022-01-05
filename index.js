@@ -26,9 +26,6 @@ async function run() {
     // );
     const usersCollection = database.collection("users");
     const bloodRequestsCollection = database.collection("bloodRequests");
-    // const bloodRequestsHistoryCollection = database.collection(
-    //   "bloodRequestsHistory"
-    // );
 
     // donate blood POST API
     app.post("/donateBlood", async (req, res) => {
@@ -83,8 +80,7 @@ async function run() {
       const users = await cursor.toArray();
       res.json(users);
     });
-
-    // post users
+    // users post api
     app.post("/users", async (req, res) => {
       const user = req.body;
       const result = await usersCollection.insertOne(user);
