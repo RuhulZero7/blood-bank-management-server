@@ -24,6 +24,7 @@ async function run() {
     // const donateBloodsHistoryCollection = database.collection(
     //   "donateBloodsHistory"
     // );
+    const usersCollection = database.collection("users");
     const bloodRequestsCollection = database.collection("bloodRequests");
     // const bloodRequestsHistoryCollection = database.collection(
     //   "bloodRequestsHistory"
@@ -61,18 +62,9 @@ async function run() {
     app.get("/donateBlood/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
-      const products = await donateBloodsCollection.findOne(query);
-      res.json(products);
+      const blood = await donateBloodsCollection.findOne(query);
+      res.json(blood);
     });
-
-    // get filtered donation
-    // app.get("/donateBlood/:email", async (req, res) => {
-    //   const email = req.params.email;
-    //   const query = { email: email };
-    //   const cursor = donateBloodsCollection.find(query);
-    //   const result = await cursor.toArray();
-    //   res.json(result);
-    // });
 
     // get filtered donation
     app.get("/:email/donateBlood", async (req, res) => {
@@ -80,7 +72,6 @@ async function run() {
       const query = { email: email };
       const cursor = donateBloodsCollection.find(query);
       const users = await cursor.toArray();
-      console.log(users);
       res.json(users);
     });
 
@@ -91,6 +82,13 @@ async function run() {
       const cursor = bloodRequestsCollection.find(query);
       const users = await cursor.toArray();
       res.json(users);
+    });
+
+    // post users
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      const result = await usersCollection.insertOne(user);
+      res.json(result);
     });
   } finally {
     //   await client.close();
