@@ -36,7 +36,7 @@ async function run() {
       res.json(result);
     });
 
-    // donate blood GET API
+    //donate blood GET API
     app.get("/donateBloodd", async (req, res) => {
       const cursor = donateBloodsCollection.find({});
       const bloods = await cursor.toArray();
