@@ -11,7 +11,10 @@ app.use(cors());
 app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.qu1uq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
-const client = new MongoClient(uri);
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 async function run() {
   try {
@@ -47,6 +50,13 @@ async function run() {
       res.json(result);
     });
 
+    // blood request GET API
+    app.get("/bloodRequest", async (req, res) => {
+      const cursor = bloodRequestsCollection.find({});
+      const requests = await cursor.toArray();
+      res.json(requests);
+    });
+
     // get single donation
     app.get("/donateBlood/:id", async (req, res) => {
       const id = req.params.id;
@@ -56,12 +66,31 @@ async function run() {
     });
 
     // get filtered donation
-    app.get("/donateBlood/:email", async (req, res) => {
+    // app.get("/donateBlood/:email", async (req, res) => {
+    //   const email = req.params.email;
+    //   const query = { email: email };
+    //   const cursor = donateBloodsCollection.find(query);
+    //   const result = await cursor.toArray();
+    //   res.json(result);
+    // });
+
+    // get filtered donation
+    app.get("/:email/donateBlood", async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
       const cursor = donateBloodsCollection.find(query);
-      const result = await cursor.toArray();
-      res.json(result);
+      const users = await cursor.toArray();
+      console.log(users);
+      res.json(users);
+    });
+
+    // get filtered request
+    app.get("/:email/bloodRequest", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const cursor = bloodRequestsCollection.find(query);
+      const users = await cursor.toArray();
+      res.json(users);
     });
   } finally {
     //   await client.close();
