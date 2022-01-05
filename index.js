@@ -26,7 +26,21 @@ async function run() {
     // );
     const usersCollection = database.collection("users");
     const bloodRequestsCollection = database.collection("bloodRequests");
+    const bloodsCollection = database.collection("bloods");
 
+    //  bloods POST API
+    app.post("/bloods", async (req, res) => {
+      const blood = req.body;
+      const result = await bloodsCollection.insertOne(blood);
+      res.json(result);
+    });
+
+    // bloods GET API
+    app.get("/bloods", async (req, res) => {
+      const cursor = bloodsCollection.find({});
+      const bloods = await cursor.toArray();
+      res.json(bloods);
+    });
     // donate blood POST API
     app.post("/donateBlood", async (req, res) => {
       const blood = req.body;
