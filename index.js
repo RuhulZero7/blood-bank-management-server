@@ -35,12 +35,6 @@ async function run() {
       res.json(result);
     });
 
-    // bloods GET API
-    app.get("/bloods", async (req, res) => {
-      const cursor = bloodsCollection.find({});
-      const bloods = await cursor.toArray();
-      res.json(bloods);
-    });
     // donate blood POST API
     app.post("/donateBlood", async (req, res) => {
       const blood = req.body;
@@ -48,18 +42,32 @@ async function run() {
       res.json(result);
     });
 
-    // donate blood GET API
-    app.get("/donateBlood", async (req, res) => {
-      const cursor = donateBloodsCollection.find({});
-      const bloods = await cursor.toArray();
-      res.json(bloods);
-    });
-
     // blood request POST API
     app.post("/bloodRequest", async (req, res) => {
       const blood = req.body;
       const result = await bloodRequestsCollection.insertOne(blood);
       res.json(result);
+    });
+
+    // users post api
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      const result = await usersCollection.insertOne(user);
+      res.json(result);
+    });
+
+    // bloods GET API
+    app.get("/bloods", async (req, res) => {
+      const cursor = bloodsCollection.find({});
+      const bloods = await cursor.toArray();
+      res.json(bloods);
+    });
+
+    // donate blood GET API
+    app.get("/donateBlood", async (req, res) => {
+      const cursor = donateBloodsCollection.find({});
+      const bloods = await cursor.toArray();
+      res.json(bloods);
     });
 
     // blood request GET API
@@ -94,10 +102,18 @@ async function run() {
       const users = await cursor.toArray();
       res.json(users);
     });
-    // users post api
-    app.post("/users", async (req, res) => {
+
+    // put users
+    app.put("/users", async (req, res) => {
       const user = req.body;
-      const result = await usersCollection.insertOne(user);
+      const filter = { email: user.email };
+      const options = { upsert: true };
+      const updateDoc = { $set: user };
+      const result = await usersCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
       res.json(result);
     });
   } finally {
