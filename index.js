@@ -135,6 +135,27 @@ async function run() {
       }
       res.json({ admin: isAdmin });
     });
+
+    // UPDATE API
+    app.put("/donateBlood/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedData = req.body;
+      const query = { _id: ObjectId(id) };
+
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          status: updatedData.status,
+        },
+      };
+      const result = await donateBloodsCollection.updateOne(
+        query,
+        updateDoc,
+        options
+      );
+      // console.log('updating user with id', result);
+      res.json(result);
+    });
   } finally {
     //   await client.close();
   }
