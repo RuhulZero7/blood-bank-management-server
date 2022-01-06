@@ -21,9 +21,6 @@ async function run() {
     await client.connect();
     const database = client.db("bloodBank");
     const donateBloodsCollection = database.collection("donateBloods");
-    // const donateBloodsHistoryCollection = database.collection(
-    //   "donateBloodsHistory"
-    // );
     const usersCollection = database.collection("users");
     const bloodRequestsCollection = database.collection("bloodRequests");
     const bloodsCollection = database.collection("bloods");
@@ -114,6 +111,16 @@ async function run() {
         updateDoc,
         options
       );
+      res.json(result);
+    });
+
+    // put admin
+    app.put("/users/admin", async (req, res) => {
+      const user = req.body;
+      console.log("put", user);
+      const filter = { email: user.email };
+      const updateDoc = { $set: { role: "admin" } };
+      const result = await usersCollection.updateOne(filter, updateDoc);
       res.json(result);
     });
   } finally {
