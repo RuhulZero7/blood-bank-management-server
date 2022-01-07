@@ -156,6 +156,26 @@ async function run() {
       // console.log('updating user with id', result);
       res.json(result);
     });
+
+    // UPDATE API blood request
+    app.put("/bloodRequest/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedData = req.body;
+      const query = { _id: ObjectId(id) };
+
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          status: updatedData.status,
+        },
+      };
+      const result = await bloodRequestsCollection.updateOne(
+        query,
+        updateDoc,
+        options
+      );
+      res.json(result);
+    });
   } finally {
     //   await client.close();
   }
