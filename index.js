@@ -98,6 +98,15 @@ async function run() {
       res.json(users);
     });
 
+    // get filtered donation
+    app.get("/:email/bloods", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const cursor = donateBloodsCollection.find(query);
+      const users = await cursor.toArray();
+      res.json(users);
+    });
+
     // get filtered request
     app.get("/:email/bloodRequest", async (req, res) => {
       const email = req.params.email;
