@@ -60,6 +60,13 @@ async function run() {
       res.json(bloods);
     });
 
+    // users GET API
+    app.get("/users", async (req, res) => {
+      const cursor = usersCollection.find({});
+      const users = await cursor.toArray();
+      res.json(users);
+    });
+
     // donate blood GET API
     app.get("/donateBlood", async (req, res) => {
       const cursor = donateBloodsCollection.find({});
