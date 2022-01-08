@@ -192,6 +192,26 @@ async function run() {
       );
       res.json(result);
     });
+
+    // UPDATE API blood donation request
+    app.put("/bloods/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedData = req.body;
+      const query = { _id: ObjectId(id) };
+
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          status: updatedData.status,
+        },
+      };
+      const result = await bloodsCollection.updateOne(
+        query,
+        updateDoc,
+        options
+      );
+      res.json(result);
+    });
   } finally {
     //   await client.close();
   }
