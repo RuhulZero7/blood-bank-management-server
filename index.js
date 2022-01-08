@@ -89,7 +89,7 @@ async function run() {
       res.json(blood);
     });
 
-    // get filtered donation
+    // get filtered donar
     app.get("/:email/donateBlood", async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
@@ -102,9 +102,9 @@ async function run() {
     app.get("/:email/bloods", async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
-      const cursor = donateBloodsCollection.find(query);
-      const users = await cursor.toArray();
-      res.json(users);
+      const cursor = bloodsCollection.find(query);
+      const bloods = await cursor.toArray();
+      res.json(bloods);
     });
 
     // get filtered request
